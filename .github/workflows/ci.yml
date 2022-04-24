@@ -27,18 +27,18 @@ jobs:
       - name: Deploy to DEV
         if: endsWith(github.ref, '/devshared')
         run: |
-          export environment DEV
+          export environment=DEV
           sfdy deploy -u ${{ secrets.DEV_USERNAME }} -p ${{ secrets.DEV_PASSWORD }}
           
       - name: Deploy to UAT
         if: endsWith(github.ref, '/uat')
         run: |
-          export environment UAT
+          export environment=UAT
           sfdy deploy -u ${{ secrets.UAT_USERNAME }} -p ${{ secrets.UAT_PASSWORD }}
         
       - name: Deploy to PROD
         if: endsWith(github.ref, '/master')
         run: |
-          export environment PROD
+          export environment=PROD
           sfdy deploy -u ${{ secrets.PROD_USERNAME }} -p ${{ secrets.PROD_PASSWORD }}
       

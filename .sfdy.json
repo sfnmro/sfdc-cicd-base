@@ -1,0 +1,45 @@
+{
+  "permissionSets": {
+    "stripUselessFls": true
+  },
+  "objectTranslations": {
+    "stripUntranslatedFields": true,
+    "stripNotVersionedFields": true
+  },
+  "preDeployPlugins": [".sfdy-plugins/endpoints-fix.js",".sfdy-plugins/metadata-fix.js"],
+  "postRetrievePlugins": [],
+  "profiles": {
+    "addAllUserPermissions": true,
+    "addDisabledVersionedObjects": true,
+    "addExtraObjects": [
+      "*",
+      "!*__?",
+      "!Account",
+      "Lead"
+    ],
+    "addExtraTabVisibility": [
+      "*",
+      "!*__?",
+      "!*Account",
+      "*Lead"
+    ],
+    "addExtraApplications": [
+      "*",
+      "!standard__*"
+    ],
+    "stripUserPermissionsFromStandardProfiles": true,
+    "stripUnversionedStuff": true
+  },
+  "roles": {
+    "stripPartnerRoles": true
+  },
+  "staticResources": {
+    "useBundleRenderer": [
+      "*"
+    ]
+  },
+  "stripManagedPackageFields": [],
+  "excludeFiles": [
+    "lwc/**/__tests__/**/*"
+  ]
+}
