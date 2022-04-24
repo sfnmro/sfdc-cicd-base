@@ -1,5 +1,5 @@
 module.exports = async ({ environment, log }, helpers) => {
-    log('ENV: ' + environment)
+    log('Endpoint Fix for ENV: ' + environment)
     helpers.xmlTransformer('namedCredentials/*', async (filename, fJson) => {
       /*log(`Patching ${filename}...`)    
       if(filename === 'idontwanttochangethis.NamedCredential') return
