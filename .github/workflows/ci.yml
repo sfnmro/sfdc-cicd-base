@@ -1,8 +1,6 @@
 name: CI
 on:
-  # Triggers the workflow on push or pull request events for master,uat and devshared branches
-  push:
-    branches: [ master , uat , devshared ]
+  # Triggers the workflow on pull request events for master,uat and devshared branches
   pull_request:
     branches: [ master , uat , devshared ]
 jobs:
@@ -20,19 +18,19 @@ jobs:
         run: npm install -g sfdy
       # If branch is devshared, deploy to the DEV SF env 
       - name: Deploy to DEV
-        if: endsWith(github.ref, '/devshared')
+        if: ${{ github.base_ref == 'devshared' }}
         run: |
           export environment=DEV
           sfdy deploy -u ${{ secrets.DEV_USERNAME }} -p ${{ secrets.DEV_PASSWORD }} -s
       # If branch is uat, deploy to the UAT SF env    
       - name: Deploy to UAT
-        if: endsWith(github.ref, '/uat')
+        if: ${{ github.base_ref == 'uat' }}
         run: |
           export environment=UAT
           sfdy deploy -u ${{ secrets.UAT_USERNAME }} -p ${{ secrets.UAT_PASSWORD }} -s
       # If branch is master, deploy to the PROD SF env  
       - name: Deploy to PROD
-        if: endsWith(github.ref, '/master')
+        if: ${{ github.base_ref == 'master' }}
         run: |
           export environment=PROD
           sfdy deploy -u ${{ secrets.PROD_USERNAME }} -p ${{ secrets.PROD_PASSWORD }}
