@@ -1,44 +1,38 @@
 name: CI
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the MASTER branch
+  # Triggers the workflow on push or pull request events for master,uat and devshared branches
   push:
     branches: [ master , uat , devshared ]
   pull_request:
     branches: [ master , uat , devshared ]
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
-      
+      # Install and setup node.js
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.1.1
-        
+      # Install and setup SFDY
       - name: Setup SFDY
         run: npm install -g sfdy
-      
+      # If branch is devshared, deploy to the DEV SF env 
       - name: Deploy to DEV
         if: endsWith(github.ref, '/devshared')
         run: |
           export environment=DEV
-          sfdy deploy -u ${{ secrets.DEV_USERNAME }} -p ${{ secrets.DEV_PASSWORD }}
-          
+          sfdy deploy -u ${{ secrets.DEV_USERNAME }} -p ${{ secrets.DEV_PASSWORD }} -s
+      # If branch is uat, deploy to the UAT SF env    
       - name: Deploy to UAT
         if: endsWith(github.ref, '/uat')
         run: |
           export environment=UAT
-          sfdy deploy -u ${{ secrets.UAT_USERNAME }} -p ${{ secrets.UAT_PASSWORD }}
-        
+          sfdy deploy -u ${{ secrets.UAT_USERNAME }} -p ${{ secrets.UAT_PASSWORD }} -s
+      # If branch is master, deploy to the PROD SF env  
       - name: Deploy to PROD
         if: endsWith(github.ref, '/master')
         run: |
           export environment=PROD
           sfdy deploy -u ${{ secrets.PROD_USERNAME }} -p ${{ secrets.PROD_PASSWORD }}
-      
