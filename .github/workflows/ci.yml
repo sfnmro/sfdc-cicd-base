@@ -6,16 +6,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: lnapo94/pydx:latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
-      # Install and setup node.js
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3.1.1
-      # Install and setup SFDY
-      - name: Setup SFDY
-        run: npm install -g sfdy
       # If branch is devshared, deploy to the DEV SF env 
       - name: Deploy to DEV
         if: ${{ github.base_ref == 'devshared' }}
@@ -33,4 +29,4 @@ jobs:
         if: ${{ github.base_ref == 'master' }}
         run: |
           export environment=PROD
-          sfdy deploy -u ${{ secrets.PROD_USERNAME }} -p ${{ secrets.PROD_PASSWORD }}
+          pydx deploy -u ${{ secrets.PROD_USERNAME }} -p ${{ secrets.PROD_PASSWORD }}
