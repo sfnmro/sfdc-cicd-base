@@ -6,31 +6,27 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: lnapo94/pydx:latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
-      # Install and setup node.js
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3.1.1
-      # Install and setup SFDY
-      - name: Setup SFDY
-        run: npm install -g sfdy
-      # If branch is devshared, deploy to the DEV SF env 
       - name: Deploy to DEV
         if: ${{ github.base_ref == 'devshared' }}
         run: |
           export environment=DEV
-          sfdy deploy -u ${{ secrets.DEV_USERNAME }} -p ${{ secrets.DEV_PASSWORD }} -s
+          pydx deploy -u ${{ secrets.DEV_USERNAME }} -p ${{ secrets.DEV_PASSWORD }} -s
       # If branch is uat, deploy to the UAT SF env    
       - name: Deploy to UAT
         if: ${{ github.base_ref == 'uat' }}
         run: |
           export environment=UAT
-          sfdy deploy -u ${{ secrets.UAT_USERNAME }} -p ${{ secrets.UAT_PASSWORD }} -s
+          pydx deploy -u ${{ secrets.UAT_USERNAME }} -p ${{ secrets.UAT_PASSWORD }} -s
       # If branch is master, deploy to the PROD SF env  
       - name: Deploy to PROD
         if: ${{ github.base_ref == 'master' }}
         run: |
           export environment=PROD
-          sfdy deploy -u ${{ secrets.PROD_USERNAME }} -p ${{ secrets.PROD_PASSWORD }}
+          pydx init
+          pydx deploy -u ${{ secrets.PROD_USERNAME }} -p ${{ secrets.PROD_PASSWORD }}
